@@ -2,6 +2,7 @@ import pathlib
 import textwrap
 
 import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 import PIL.Image
 from pathlib import Path
 import os
@@ -10,7 +11,17 @@ GOOGLE_API_KEY = 'AIzaSyAGvP2HuK1HNtrf96eARkUhjFP-YgfLwtU'
 
 genai.configure(api_key=GOOGLE_API_KEY)
 
-model = genai.GenerativeModel('gemini-pro-vision')
+model = genai.GenerativeModel(
+    'gemini-pro-vision',
+    generation_config={'temperature':0},
+    safety_settings={
+            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+        }
+    )
+print(model)
 
 # img = PIL.Image.open('Screenshot 2024-02-29 at 6.26.25 PM.png')
 
