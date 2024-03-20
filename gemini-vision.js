@@ -6,20 +6,20 @@ const genAI = new GoogleGenerativeAI('AIzaSyAGvP2HuK1HNtrf96eARkUhjFP-YgfLwtU');
 
 const safetySettings = [
     {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_NONE,
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
     },
     {
-      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-      threshold: HarmBlockThreshold.BLOCK_NONE,
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
     },
     {
         category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-        probability: HarmBlockThreshold.BLOCK_NONE
+        threshold: HarmBlockThreshold.BLOCK_NONE
     },
     {
         category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        probability: HarmBlockThreshold.BLOCK_NONE
+        threshold: HarmBlockThreshold.BLOCK_NONE
     },
 ];
 
@@ -71,17 +71,30 @@ function fileToGenerativePart(path, mimeType) {
 async function run() {
   
     const imageParts = [
-        fileToGenerativePart("Screenshot 2023-07-18 at 6.15.11 PM.png", "image/png"),
+        fileToGenerativePart("Screenshot 2024-03-01 at 12.08.42 PM.png", "image/png"),
     ];
   
     const result = await model.generateContent([prompt, ...imageParts]);
-    console.log(result);
+    console.log({result});
 
     const response = await result.response;
-    console.log(response);
+    console.log({response});
 
-    const text = response.text;
-    console.log(text);
+    console.log(response.promptFeedback);
+    console.log("blockReason" in response.promptFeedback);
+
+    const text = response.text();
+
+    return text
 }
 
-run();
+async function processMessage() {
+    const text = await run();
+    const image_response = JSON.parse(text)
+    console.log(image_response);
+    const topLevelCategory = image_response.topLevelCategory
+    
+    console.log(topLevelCategory);
+}
+
+processMessage();
