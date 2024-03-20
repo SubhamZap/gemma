@@ -1,8 +1,10 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { HarmBlockThreshold, HarmCategory } = require("@google/generative-ai");
 const fs = require("fs");
+require("dotenv").config();
 
-const genAI = new GoogleGenerativeAI('AIzaSyAGvP2HuK1HNtrf96eARkUhjFP-YgfLwtU');
+const gemini_api_key = process.env.GOOGLE_VISION_API;
+const genAI = new GoogleGenerativeAI(gemini_api_key);
 
 const safetySettings = [
     {
@@ -71,7 +73,7 @@ function fileToGenerativePart(path, mimeType) {
 async function run() {
   
     const imageParts = [
-        fileToGenerativePart("Screenshot 2024-03-01 at 12.08.42 PM.png", "image/png"),
+        fileToGenerativePart("https://picsum.photos/seed/e/300/300", "image/png"),
     ];
   
     const result = await model.generateContent([prompt, ...imageParts]);

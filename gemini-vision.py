@@ -7,8 +7,10 @@ import PIL.Image
 from pathlib import Path
 import os
 import json
+from dotenv import load_dotenv
+load_dotenv()
 
-GOOGLE_API_KEY = 'AIzaSyD7wfQPgfxUJz-dI3Ya5xnmgb3YAfphgbs'
+GOOGLE_API_KEY = os.getenv("GOOGLE_VISION_API")
 
 genai.configure(api_key=GOOGLE_API_KEY)
 
